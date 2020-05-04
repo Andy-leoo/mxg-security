@@ -1,0 +1,30 @@
+server:
+  port: 80
+
+spring:
+  thymeleaf:
+    cache: false
+  #数据源配置
+  datasource:
+    username: root
+    password: root
+    url:  jdbc:mysql://47.104.234.172:3306/study-security?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf8
+    driver-class-name: com.mysql.cj.jdbc.Driver  #mysql8版本以上驱动包指定新的驱动类
+
+
+mxg:
+  security:
+    authentication:
+      loginPage: /login/page  #响应认证登录页面url
+      loginProcessingUrl: /login/form  # 登录表单提交处理Url 默认是/login
+      usernameParameter: name  # 默认用户名属性名是username
+      passwordParameter: pwd  # 默认密码属性名是password
+      staticPaths: #释放静态资源  "/dist/**","/modules/**","/plugins/**
+        - /dist/**
+        - /modules/**
+        - /plugins/**
+      loginType: REDIRECT  # 认证之后 响应的类型：JSON/REDIRECT
+      imageCodeUrl: /code/image # 获取图形验证码 url
+      mobileCodeUrl: /code/mobile # 发送手机验证码 url
+      mobilePage: /mobile/page # 前往手机登录页面地址
+      tokenValiditySeconds: 604800 # 记住我有效时长，单位秒， 注意不要用乘法*，会被认为字符串

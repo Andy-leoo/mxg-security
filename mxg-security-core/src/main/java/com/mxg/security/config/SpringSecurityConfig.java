@@ -23,6 +23,8 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.session.InvalidSessionStrategy;
+import org.springframework.security.web.session.SessionInformationExpiredEvent;
+import org.springframework.security.web.session.SessionInformationExpiredStrategy;
 
 import javax.sql.DataSource;
 
@@ -106,6 +108,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Autowired
     private InvalidSessionStrategy invalidSessionStrategy;
+
+    @Autowired
+    private SessionInformationExpiredStrategy sessionInformationExpiredStrategy;
     /**
     　　* @Description:
             资源权限配置（过滤器链）
@@ -149,8 +154,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .tokenRepository(jdbcTokenRepository()) //保存登录信息
                 .tokenValiditySeconds(60*60*24*7) //记住我有效时长
                 .and()
-        .sessionManagement()
-        .invalidSessionStrategy(invalidSessionStrategy) // session 失败后处理逻辑
+                .sessionManagement()
+                .invalidSessionStrategy(invalidSessionStrategy) // session 失败后处理逻辑
+                .maximumSessions(1)//用户在系统中的最大的session数
+                .expiredSessionStrategy(sessionInformationExpiredStrategy)//如果用户达到最大的session数，则调用此处实现
         ;
 
         // 将手机相关的配置绑定过滤器链上

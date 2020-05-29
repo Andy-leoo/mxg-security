@@ -22,6 +22,7 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.session.InvalidSessionStrategy;
 
 import javax.sql.DataSource;
 
@@ -101,6 +102,11 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     /**
+     * 注入session失败策略
+     */
+    @Autowired
+    private InvalidSessionStrategy invalidSessionStrategy;
+    /**
     　　* @Description:
             资源权限配置（过滤器链）
             1. 拦截哪些资源
@@ -142,7 +148,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .rememberMe() //记住我功能
                 .tokenRepository(jdbcTokenRepository()) //保存登录信息
                 .tokenValiditySeconds(60*60*24*7) //记住我有效时长
-
+                .and()
+        .sessionManagement()
+        .invalidSessionStrategy(invalidSessionStrategy) // session 失败后处理逻辑
         ;
 
         // 将手机相关的配置绑定过滤器链上

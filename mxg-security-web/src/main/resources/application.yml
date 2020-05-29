@@ -1,5 +1,8 @@
 server:
   port: 80
+  servlet:
+    session:
+      timeout: 5s    # session超时时间， 默认30M， 至少设置1m
 
 spring:
   thymeleaf:

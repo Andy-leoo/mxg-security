@@ -161,6 +161,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
               //  .maxSessionsPreventsLogin(true)//当用户达到最大session数，则不允许后面进行登录
 
         ;
+        http.csrf().disable();//关闭跨站请求伪造
 
         // 将手机相关的配置绑定过滤器链上
         http.apply(mobileAuthenticationConfig);

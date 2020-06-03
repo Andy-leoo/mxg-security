@@ -3,10 +3,12 @@ package com.mxg.security.config;
 import com.mxg.security.authentication.mobile.SmsCodeSender;
 import com.mxg.security.authentication.mobile.SmsSend;
 import com.mxg.security.authentication.session.CustomInvalidSessionStrategy;
+import com.mxg.security.authentication.session.CustomSessionInformationExpiredStrategy;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.web.session.InvalidSessionStrategy;
+import org.springframework.security.web.session.SessionInformationExpiredStrategy;
 
 /**
  * @author jiangxiao
@@ -48,5 +50,16 @@ public class SeurityConfigBean {
     @ConditionalOnMissingBean(SmsSend.class)
     public SmsSend smsSend(){
         return new SmsCodeSender();
+    }
+
+    /**
+     *  添加方法注入SessionInformationExpiredStrategy实现
+     * 方便web应用覆盖此实现,定义不同逻辑
+     * @return
+     */
+    @Bean
+    @ConditionalOnMissingBean(SessionInformationExpiredStrategy.class)
+    public SessionInformationExpiredStrategy sessionInformationExpiredStrategy(){
+        return new CustomSessionInformationExpiredStrategy();
     }
 }
